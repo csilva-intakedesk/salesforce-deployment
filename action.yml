@@ -200,6 +200,7 @@ runs:
               SF_AUTH_USERNAME: ${{ inputs.SF_AUTH_USERNAME }}
               DELTA_SOURCE_DIRECTORY: ${{ inputs.DELTA_SOURCE_DIRECTORY }}
               ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+          shell: bash
 
         - name: SKUID Pages Deployment
           run: |
@@ -265,3 +266,4 @@ runs:
           env:
               ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
               TARGET_USERNAME_ALIAS: ${{ inputs.TARGET_USERNAME_ALIAS }}
+          shell: bash
