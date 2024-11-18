@@ -103,6 +103,8 @@ runs:
 
         - name: "Checkout source code"
           uses: actions/checkout@v4
+          with:
+              fetch-depth: 0
 
         - name: Get changed files
           id: changed-files
