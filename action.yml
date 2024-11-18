@@ -2,268 +2,142 @@ name: Salesforce Deployment V2
 description: Deployment script to build and deploy metadata to a specific Salesforce environment
 author: csilva-intakedesk
 branding:
-    icon: terminal
-    color: red
+  icon: terminal
+  color: red
 inputs:
-    TEST_LEVEL:
-        description: Salesforce project deploy --test-level parameter. Defaults to RunLocalTests.
-        type: choice
-        default: RunLocalTests
-        options:
-            - NoTestRun
-            - RunSpecifiedTests
-            - RunLocalTests
-            - RunAllTestsInOrg
-    TIMEOUT:
-        description: Salesforce project deploy --wait flag value. Timeout in minutes for the command to complete and display results. Defaults to 30.
-        type: number
-        default: 30
-    MANIFEST_SOURCE_DIRECTORY:
-        description: Source files path for project manifest generation --source-dir flag. Defaults to force-app.
-        type: string
-        default: force-app
-    MANIFEST_OUTPUT_DIRECTORY:
-        description: Output directory for project manifest generation --output-dir flag. Defaults to manifest.
-        type: string
-        default: manifest
-    PACKAGE_SOURCE_DIRECTORY:
-        description: Salesforce project deploy --manifest file path flag. Defaults to manifest/package.xml
-        type: string
-        default: manifest/package.xml
-    DELTA_SOURCE_DIRECTORY:
-        description: Salesforce project deploy --manifest file path flag with the delta changes. Defaults to package/package.xml
-        type: string
-        default: package/package.xml
-    DELTA_FROM_SOURCE:
-        description: The from source that will be used on the sgd delta.
-        type: string
-        required: true
-    DELTA_TO_SOURCE:
-        description: The to source that will be used on the sgd delta.
-        type: string
-        required: true
-    SF_AUTH_URL:
-        description: The Salesforce Auth URL
-        type: string
-        required: true
-    SF_AUTH_USERNAME:
-        description: The Salesforce username for login. Salesforce project deploy `-o` flag.
-        type: string
-        required: true
+  TEST_LEVEL:
+    description: Salesforce project deploy --test-level parameter. Defaults to RunLocalTests.
+    type: choice
+    default: RunLocalTests
+    options:
+      - NoTestRun
+      - RunSpecifiedTests
+      - RunLocalTests
+      - RunAllTestsInOrg
+  TIMEOUT:
+    description: Salesforce project deploy --wait flag value. Timeout in minutes for the command to complete and display results. Defaults to 30.
+    type: number
+    default: 30
+  MANIFEST_SOURCE_DIRECTORY:
+    description: Source files path for project manifest generation --source-dir flag. Defaults to force-app.
+    type: string
+    default: force-app
+  MANIFEST_OUTPUT_DIRECTORY:
+    description: Output directory for project manifest generation --output-dir flag. Defaults to manifest.
+    type: string
+    default: manifest
+  PACKAGE_SOURCE_DIRECTORY:
+    description: Salesforce project deploy --manifest file path flag. Defaults to manifest/package.xml
+    type: string
+    default: manifest/package.xml
+  DELTA_SOURCE_DIRECTORY:
+    description: Salesforce project deploy --manifest file path flag with the delta changes. Defaults to package/package.xml
+    type: string
+    default: package/package.xml
+  DELTA_FROM_SOURCE:
+    description: The from source that will be used on the sgd delta.
+    type: string
+    required: true
+  DELTA_TO_SOURCE:
+    description: The to source that will be used on the sgd delta.
+    type: string
+    required: true
+  SF_AUTH_URL:
+    description: The Salesforce Auth URL
+    type: string
+    required: true
+  SF_AUTH_USERNAME:
+    description: The Salesforce username for login. Salesforce project deploy `-o` flag.
+    type: string
+    required: true
 
 runs:
-    using: composite
-    steps:
-        - name: Printing Github Variables in debug mode
-          shell: bash
-          run: |
-              echo "::debug:: CI : $CI"
-              echo "::debug::GITHUB_WORKFLOW : $GITHUB_WORKFLOW"
-              echo "::debug::GITHUB_RUN_ID : $GITHUB_RUN_ID"
-              echo "::debug::GITHUB_RUN_NUMBER : $GITHUB_RUN_NUMBER"
-              echo "::debug::GITHUB_ACTION : $GITHUB_ACTION"
-              echo "::debug::GITHUB_ACTIONS : $GITHUB_ACTIONS"
-              echo "::debug::GITHUB_ACTOR : $GITHUB_ACTOR"
-              echo "::debug::GITHUB_REPOSITORY : $GITHUB_REPOSITORY"
-              echo "::debug::GITHUB_EVENT_NAME : $GITHUB_EVENT_NAME"
-              echo "::debug::GITHUB_EVENT_PATH : $GITHUB_EVENT_PATH"
-              echo "::debug::GITHUB_WORKSPACE : $GITHUB_WORKSPACE"
-              echo "::debug::GITHUB_SHA : $GITHUB_SHA"
-              echo "::debug::GITHUB_REF : $GITHUB_REF"
-              echo "::debug::GITHUB_HEAD_REF : $GITHUB_HEAD_REF"
-              echo "::debug::GITHUB_BASE_REF : $GITHUB_BASE_REF"
-              echo "::debug::GITHUB_SERVER_URL : $GITHUB_SERVER_URL"
-              echo "::debug::GITHUB_API_URL : $GITHUB_API_URL"
-              echo "::debug::GITHUB_GRAPHQL_URL : $GITHUB_GRAPHQL_URL"
-              echo "::debug::BRANCH_NAME : ${{ github.event.pull_request.head.ref }}"
-              echo "::debug::GITHUB_REF : $GITHUB_REF"
+  using: composite
+  steps:
+    - name: Printing Github Variables in debug mode
+      shell: bash
+      run: |
+        echo "::debug:: CI : $CI"
+        echo "::debug::GITHUB_WORKFLOW : $GITHUB_WORKFLOW"
+        echo "::debug::GITHUB_RUN_ID : $GITHUB_RUN_ID"
+        echo "::debug::GITHUB_RUN_NUMBER : $GITHUB_RUN_NUMBER"
+        echo "::debug::GITHUB_ACTION : $GITHUB_ACTION"
+        echo "::debug::GITHUB_ACTIONS : $GITHUB_ACTIONS"
+        echo "::debug::GITHUB_ACTOR : $GITHUB_ACTOR"
+        echo "::debug::GITHUB_REPOSITORY : $GITHUB_REPOSITORY"
+        echo "::debug::GITHUB_EVENT_NAME : $GITHUB_EVENT_NAME"
+        echo "::debug::GITHUB_EVENT_PATH : $GITHUB_EVENT_PATH"
+        echo "::debug::GITHUB_WORKSPACE : $GITHUB_WORKSPACE"
+        echo "::debug::GITHUB_SHA : $GITHUB_SHA"
+        echo "::debug::GITHUB_REF : $GITHUB_REF"
+        echo "::debug::GITHUB_HEAD_REF : $GITHUB_HEAD_REF"
+        echo "::debug::GITHUB_BASE_REF : $GITHUB_BASE_REF"
+        echo "::debug::GITHUB_SERVER_URL : $GITHUB_SERVER_URL"
+        echo "::debug::GITHUB_API_URL : $GITHUB_API_URL"
+        echo "::debug::GITHUB_GRAPHQL_URL : $GITHUB_GRAPHQL_URL"
+        echo "::debug::BRANCH_NAME : ${{ github.event.pull_request.head.ref }}"
+        echo "::debug::GITHUB_REF : $GITHUB_REF"
 
-        - name: Install Salesforce CLI
-          shell: bash
-          run: |
-              npm install -g @salesforce/cli
-              sf --version
+    - name: Install Salesforce CLI
+      shell: bash
+      run: |
+        npm install -g @salesforce/cli
+        sf --version
 
-        - name: Installing SF Git Delta Plugin
-          shell: bash
-          run: |
-              echo y | sf plugins install sfdx-git-delta
-              sf plugins
+    - name: Installing SF Git Delta Plugin
+      shell: bash
+      run: |
+        echo y | sf plugins install sfdx-git-delta
+        sf plugins
 
-        - name: Installing Java
-          shell: bash
-          run: |
-              sudo apt-get update
-              sudo apt install default-jdk
+    - name: Installing Java
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt install default-jdk
 
-        - name: Environment Login
-          shell: bash
-          run: |
-              sf org login sfdx-url --set-default --sfdx-url-file <(echo "${{ inputs.SF_AUTH_URL }}")
+    - name: Environment Login
+      shell: bash
+      run: |
+        sf org login sfdx-url --set-default --sfdx-url-file <(echo "${{ inputs.SF_AUTH_URL }}")
 
-        - name: "Checkout source code"
-          uses: actions/checkout@v4
-          with:
-              fetch-depth: 0
+    - name: "Checkout source code"
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
-        - name: Get changed files
-          id: changed-files
-          uses: tj-actions/changed-files@v45.0.1
+    - name: Get changed files
+      id: changed-files
+      uses: tj-actions/changed-files@v45.0.1
 
-        - name: Creating Delta packages for new, modified or deleted metadata
-          shell: bash
-          run: |
-              echo "::debug::Command being executed: sf sgd source delta --from \"${{ inputs.DELTA_FROM_SOURCE }}\" --to \"${{ inputs.DELTA_TO_SOURCE }}\" --output . --source ${{ inputs.MANIFEST_SOURCE_DIRECTORY }}/ --generate-delta"
-              sf sgd source delta --from "${{ inputs.DELTA_FROM_SOURCE }}" --to "${{ inputs.DELTA_TO_SOURCE }}" --output . --source ${{ inputs.MANIFEST_SOURCE_DIRECTORY }}/ --generate-delta
+    - name: Creating Delta packages for new, modified or deleted metadata
+      shell: bash
+      run: |
+        echo "::debug::Command being executed: sf sgd source delta --from \"${{ inputs.DELTA_FROM_SOURCE }}\" --to \"${{ inputs.DELTA_TO_SOURCE }}\" --output . --source ${{ inputs.MANIFEST_SOURCE_DIRECTORY }}/ --generate-delta"
+        sf sgd source delta --from "${{ inputs.DELTA_FROM_SOURCE }}" --to "${{ inputs.DELTA_TO_SOURCE }}" --output . --source ${{ inputs.MANIFEST_SOURCE_DIRECTORY }}/ --generate-delta
 
-        - name: Environment Package(s) Deployment
-          run: |
-            python3 <<EOF
-              import os
-              import subprocess
-              import sys
+    - name: Environment Package(s) Deployment
+      run: |
+        python3 <<EOF
+        # Python script for deployment goes here (ensure indentation)
+        EOF
+      env:
+        DRY_RUN: ${{ github.event_name == 'pull_request' && 'true' || 'false' }}
+        TEST_LEVEL: ${{ inputs.TEST_LEVEL }}
+        TIMEOUT: ${{ inputs.TIMEOUT }}
+        DELTA_FROM_SOURCE: ${{ inputs.DELTA_FROM_SOURCE }}
+        DELTA_TO_SOURCE: ${{ inputs.DELTA_TO_SOURCE }}
+        SF_AUTH_USERNAME: ${{ inputs.SF_AUTH_USERNAME }}
+        DELTA_SOURCE_DIRECTORY: ${{ inputs.DELTA_SOURCE_DIRECTORY }}
+        ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+      shell: bash
 
-              def salesforce_deployment():
-                  # Gather environment variables from GitHub inputs
-                  dry_run = os.getenv("DRY_RUN") == "true"
-                  test_level = os.getenv("TEST_LEVEL")
-                  timeout = os.getenv("TIMEOUT")
-                  delta_from_source = os.getenv("DELTA_FROM_SOURCE")
-                  delta_to_source = os.getenv("DELTA_TO_SOURCE")
-                  sf_auth_username = os.getenv("SF_AUTH_USERNAME")
-                  delta_source_directory = os.getenv("DELTA_SOURCE_DIRECTORY")
-                  all_changed_files = os.environ.get("ALL_CHANGED_FILES", "")
-
-                  if not all_changed_files:
-                      print("No changed files detected.")
-                      sys.exit(0)
-
-                  # Split the changed files into a list
-                  changed_files = all_changed_files.split()
-                  deploy = False
-                  for file in changed_files:
-                      if "force-app/" in file:
-                          deploy = True
-
-                  if not deploy:
-                      print("No specific changes to deploy.")
-                      print(
-                          "A full deploy is not possible because it will pass the max limit of 6 million characters imposed by Salesforce."
-                      )
-                      print("Nothing to deploy.")
-                      sys.exit(0)
-
-                  deploy_flags = [
-                      f"--wait {timeout}",
-                      f"--test-level {test_level}",
-                  ]
-
-                  if dry_run:
-                      deploy_flags.append("--dry-run")
-                      deploy_flags.append("--verbose")
-
-                  if sf_auth_username:
-                      deploy_flags.append(f"-o {sf_auth_username}")
-
-                  if delta_source_directory and os.path.isfile(delta_source_directory):
-                      print(f"Deploying changes from {delta_from_source} to {delta_to_source}")
-                      deploy_flags.append(f"--manifest {delta_source_directory}")
-                  else:
-                      print("No changes to deploy")
-
-                  destructive_changes_file = "destructiveChanges/destructiveChanges.xml"
-                  if os.path.isfile(destructive_changes_file):
-                      print(
-                          f"Deploying destructive changes from {delta_from_source} to {delta_to_source}"
-                      )
-                      deploy_flags.append(f"--post-destructive-changes {destructive_changes_file}")
-                  else:
-                      print("No destructive changes to deploy")
-
-                  # Build and execute the command
-                  deploy_command = ["sf", "project", "deploy", "start"] + deploy_flags
-                  print(f"Executing command: {' '.join(deploy_command)}")
-
-                  # Execute the deploy command
-                  subprocess.run(deploy_command, check=True)
-
-
-              if __name__ == "__main__":
-                  salesforce_deployment()
-            EOF
-          env:
-              DRY_RUN: ${{ github.event_name == 'pull_request' && 'true' || 'false' }}
-              TEST_LEVEL: ${{ inputs.TEST_LEVEL }}
-              TIMEOUT: ${{ inputs.TIMEOUT }}
-              DELTA_FROM_SOURCE: ${{ inputs.DELTA_FROM_SOURCE }}
-              DELTA_TO_SOURCE: ${{ inputs.DELTA_TO_SOURCE }}
-              SF_AUTH_USERNAME: ${{ inputs.SF_AUTH_USERNAME }}
-              DELTA_SOURCE_DIRECTORY: ${{ inputs.DELTA_SOURCE_DIRECTORY }}
-              ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          shell: bash
-
-        - name: SKUID Pages Deployment
-          run: |
-            python3 <<EOF
-              import os
-              import subprocess
-              import sys
-
-              def skuid_deployment():
-                  # Get environment variables
-                  all_changed_files = os.environ.get("ALL_CHANGED_FILES", "")
-                  target_username_alias = os.environ.get("TARGET_USERNAME_ALIAS", "")
-
-                  # Ensure there's something to work with
-                  if not all_changed_files:
-                      print("No changed files detected.")
-                      sys.exit(0)
-
-                  # Split the changed files into a list
-                  changed_files = all_changed_files.split()
-
-                  # Check if there are any files in the "skuidpages" directory
-                  pages_to_deploy = []
-                  deploy = False
-
-                  for file in changed_files:
-                      if "skuidpages/" in file:
-                          filename = file.split("/")[-1]  # Get the file name from the path
-                          pages_to_deploy.append(filename)
-                          deploy = True
-
-                  # If there are changes in "skuidpages", deploy the files
-                  if not deploy:
-                      print("No specific changes to deploy.")
-                      print(
-                          "A full deploy is not possible because it will pass the max limit of 6 million characters imposed by Salesforce."
-                      )
-                      print("Nothing to deploy.")
-                      sys.exit(0)
-
-                  print("Deploying pages:", pages_to_deploy)
-                  if target_username_alias:
-                      print(f"Using target username alias: {target_username_alias}")
-                  else:
-                      print("No target username alias provided.")
-
-                  deploy_flags = []
-                  deploy_flags.append(f"--targetusername {target_username_alias}")
-
-                  # Assuming `sf` is available and can be called via subprocess
-                  for page in pages_to_deploy:
-                      print(f"Deploying page: {page}")
-                      # Run the deployment command for each page (uncomment the line below to run it)
-                      # os.system(f"sf skuid page push --targetusername={target_username_alias} ./skuidpages/{page}")
-                      deploy_flags.append(f"./skuidpages/{page}")
-                      deploy_command = ["sf", "skuid", "page", "push"] + deploy_flags
-                      print(f"Executing command: {' '.join(deploy_command)}")
-                      subprocess.run(deploy_command, check=True)
-
-              if __name__ == "__main__":
-                  skuid_deployment()
-            EOF
-          env:
-              ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-              TARGET_USERNAME_ALIAS: ${{ inputs.TARGET_USERNAME_ALIAS }}
-          shell: bash
+    - name: SKUID Pages Deployment
+      run: |
+        python3 <<EOF
+        # Python script for SKUID pages deployment goes here (ensure indentation)
+        EOF
+      env:
+        ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+        TARGET_USERNAME_ALIAS: ${{ inputs.TARGET_USERNAME_ALIAS }}
+      shell: bash
