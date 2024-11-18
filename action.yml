@@ -118,7 +118,7 @@ runs:
 
         - name: Environment Package(s) Deployment
           run: |
-            python3 <<<EOF
+            python3 <<EOF
               import os
               import subprocess
               import sys
@@ -204,7 +204,7 @@ runs:
 
         - name: SKUID Pages Deployment
           run: |
-            python3 <<<EOF
+            python3 <<EOF
               import os
               import subprocess
               import sys
