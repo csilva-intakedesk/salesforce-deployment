@@ -116,9 +116,10 @@ runs:
         echo "::debug::Command being executed: sf sgd source delta --from \"${{ inputs.DELTA_FROM_SOURCE }}\" --to \"${{ inputs.DELTA_TO_SOURCE }}\" --output . --source ${{ inputs.MANIFEST_SOURCE_DIRECTORY }}/ --generate-delta"
         sf sgd source delta --from "${{ inputs.DELTA_FROM_SOURCE }}" --to "${{ inputs.DELTA_TO_SOURCE }}" --output . --source ${{ inputs.MANIFEST_SOURCE_DIRECTORY }}/ --generate-delta
 
-    - name: Environment Package(s) Deployment
+    - name: Save salesforce_deployment.py file
+      shell: bash
       run: |
-        python3 <<EOF
+      cat << 'EOF' > salesforce_deployment.py
         import os
         import subprocess
         import sys
@@ -193,6 +194,11 @@ runs:
             salesforce_deployment()
 
         EOF
+
+
+    - name: Environment Package(s) Deployment
+      run: |
+        python3 salesforce_deployment.py
       env:
         DRY_RUN: ${{ github.event_name == 'pull_request' && 'true' || 'false' }}
         TEST_LEVEL: ${{ inputs.TEST_LEVEL }}
@@ -204,9 +210,9 @@ runs:
         ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
       shell: bash
 
-    - name: SKUID Pages Deployment
+    - name: Save skuid_deployment.py file.
       run: |
-        python3 <<EOF
+        cat << 'EOF' > skuid_deployment.py
         import os
         import subprocess
         import sys
@@ -267,7 +273,9 @@ runs:
         if __name__ == "__main__":
             skuid_deployment()
 
-        EOF
+    - name: SKUID Pages Deployment
+      run: |
+        python3 skuid_deployment.py
       env:
         ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         TARGET_USERNAME_ALIAS: ${{ inputs.TARGET_USERNAME_ALIAS }}
