@@ -211,6 +211,7 @@ runs:
       shell: bash
 
     - name: Save skuid_deployment.py file.
+      shell: bash
       run: |
         cat << 'EOF' > skuid_deployment.py
         import os
@@ -272,6 +273,8 @@ runs:
 
         if __name__ == "__main__":
             skuid_deployment()
+        
+        EOF
 
     - name: SKUID Pages Deployment
       run: |
