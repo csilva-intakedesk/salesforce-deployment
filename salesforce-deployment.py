@@ -1,6 +1,7 @@
 import os
 import subprocess
 import sys
+import tempfile
 
 
 def salesforce_deployment():
@@ -13,6 +14,22 @@ def salesforce_deployment():
     sf_auth_username = os.getenv("SF_AUTH_USERNAME")
     delta_source_directory = os.getenv("DELTA_SOURCE_DIRECTORY")
     all_changed_files = os.environ.get("ALL_CHANGED_FILES", "")
+
+
+    # Assuming inputs.SF_AUTH_URL contains the URL string
+    sf_auth_url = os.getenv("SF_AUTH_URL")
+
+    # Create a temporary file to store the SFDX URL
+    with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+        temp_file.write(sf_auth_url.encode())  # Write the URL to the temp file
+        temp_file_path = temp_file.name  # Get the file path
+
+    login_command = ["sf", "org", "login", "sfdx-url", "--set-default", "--sfdx-url-file", temp_file_path]
+
+    print(f"Executing command: {' '.join(login_command)}")
+
+    # Execute the login command
+    subprocess.run(login_command, check=True)
 
     if not all_changed_files:
         print("No changed files detected.")
@@ -34,20 +51,20 @@ def salesforce_deployment():
         sys.exit(0)
 
     deploy_flags = [
-        f"--wait {timeout}",
-        f"--test-level {test_level}",
+        "--wait",
+        timeout,
+        "--test-level",
+        test_level
     ]
 
     if dry_run:
         deploy_flags.append("--dry-run")
         deploy_flags.append("--verbose")
 
-    if sf_auth_username:
-        deploy_flags.append(f"-o {sf_auth_username}")
-
     if delta_source_directory and os.path.isfile(delta_source_directory):
         print(f"Deploying changes from {delta_from_source} to {delta_to_source}")
-        deploy_flags.append(f"--manifest {delta_source_directory}")
+        deploy_flags.append("--manifest")
+        deploy_flags.append(delta_source_directory)
     else:
         print("No changes to deploy")
 
@@ -56,7 +73,8 @@ def salesforce_deployment():
         print(
             f"Deploying destructive changes from {delta_from_source} to {delta_to_source}"
         )
-        deploy_flags.append(f"--post-destructive-changes {destructive_changes_file}")
+        deploy_flags.append("--post-destructive-changes")
+        deploy_flags.append(destructive_changes_file)
     else:
         print("No destructive changes to deploy")
 

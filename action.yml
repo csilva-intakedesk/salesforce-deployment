@@ -121,6 +121,11 @@ runs:
         echo "::debug::Command being executed: sf sgd source delta --from \"${{ inputs.DELTA_FROM_SOURCE }}\" --to \"${{ inputs.DELTA_TO_SOURCE }}\" --output . --source ${{ inputs.MANIFEST_SOURCE_DIRECTORY }}/ --generate-delta"
         sf sgd source delta --from "${{ inputs.DELTA_FROM_SOURCE }}" --to "${{ inputs.DELTA_TO_SOURCE }}" --output . --source ${{ inputs.MANIFEST_SOURCE_DIRECTORY }}/ --generate-delta
 
+    - name: FIND WHAT IS THE DIRECTORY
+      shell: bash
+      run: |
+        ls -lath
+
     - name: Save salesforce_deployment.py file
       shell: bash
       run: |
