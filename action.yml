@@ -128,6 +128,7 @@ runs:
         import os
         import subprocess
         import sys
+        import tempfile
 
 
         def salesforce_deployment():
@@ -141,8 +142,19 @@ runs:
             delta_source_directory = os.getenv("DELTA_SOURCE_DIRECTORY")
             all_changed_files = os.environ.get("ALL_CHANGED_FILES", "")
 
-            login_command = ["sf", "org", "login", "sfdx-url", "--set-default", "--sfdx-url-file <(echo /"${{ inputs.SF_AUTH_URL }}/")"]
+
+            # Assuming inputs.SF_AUTH_URL contains the URL string
+            sf_auth_url = inputs.SF_AUTH_URL
+
+            # Create a temporary file to store the SFDX URL
+            with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+                temp_file.write(sf_auth_url.encode())  # Write the URL to the temp file
+                temp_file_path = temp_file.name  # Get the file path
+
+            login_command = ["sf", "org", "login", "sfdx-url", "--set-default", "--sfdx-url-file", temp_file_path]
+
             print(f"Executing command: {' '.join(login_command)}")
+
             # Execute the login command
             subprocess.run(login_command, check=True)
 
