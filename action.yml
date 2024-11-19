@@ -141,7 +141,7 @@ runs:
             delta_source_directory = os.getenv("DELTA_SOURCE_DIRECTORY")
             all_changed_files = os.environ.get("ALL_CHANGED_FILES", "")
 
-            login_command = ["sf", "org", "login", "sfdx-url", "--set-default", "--sfdx-url-file <(echo \"${{ inputs.SF_AUTH_URL }}\""]
+            login_command = ["sf", "org", "login", "sfdx-url", "--set-default", "--sfdx-url-file <(echo \"${{ inputs.SF_AUTH_URL }}\")"]
             print(f"Executing command: {' '.join(login_command)}")
             # Execute the login command
             subprocess.run(login_command, check=True)
