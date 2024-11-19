@@ -144,7 +144,7 @@ runs:
 
 
             # Assuming inputs.SF_AUTH_URL contains the URL string
-            sf_auth_url = inputs.SF_AUTH_URL
+            sf_auth_url = os.getenv("SF_AUTH_URL")
 
             # Create a temporary file to store the SFDX URL
             with tempfile.NamedTemporaryFile(delete=False) as temp_file:
