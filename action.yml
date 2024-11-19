@@ -186,9 +186,6 @@ runs:
                 deploy_flags.append("--dry-run")
                 deploy_flags.append("--verbose")
 
-            if sf_auth_username:
-                deploy_flags.append(f"-o {sf_auth_username}")
-
             if delta_source_directory and os.path.isfile(delta_source_directory):
                 print(f"Deploying changes from {delta_from_source} to {delta_to_source}")
                 deploy_flags.append(f"--manifest {delta_source_directory}")
