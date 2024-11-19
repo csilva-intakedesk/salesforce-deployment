@@ -178,8 +178,10 @@ runs:
                 sys.exit(0)
 
             deploy_flags = [
-                f"--wait {timeout}",
-                f"--test-level {test_level}",
+                "--wait",
+                "$timeout",
+                "--test-level",
+                "$test_level"
             ]
 
             if dry_run:
@@ -188,7 +190,8 @@ runs:
 
             if delta_source_directory and os.path.isfile(delta_source_directory):
                 print(f"Deploying changes from {delta_from_source} to {delta_to_source}")
-                deploy_flags.append(f"--manifest {delta_source_directory}")
+                deploy_flags.append("--manifest")
+                deploy_flags.append("$delta_source_directory")
             else:
                 print("No changes to deploy")
 
@@ -197,7 +200,8 @@ runs:
                 print(
                     f"Deploying destructive changes from {delta_from_source} to {delta_to_source}"
                 )
-                deploy_flags.append(f"--post-destructive-changes {destructive_changes_file}")
+                deploy_flags.append("--post-destructive-changes")
+                deploy_flags.append("$destructive_changes_file")
             else:
                 print("No destructive changes to deploy")
 
