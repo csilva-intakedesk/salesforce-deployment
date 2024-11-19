@@ -124,7 +124,8 @@ runs:
     - name: FIND WHAT IS THE DIRECTORY
       shell: bash
       run: |
-        ls -lath
+        ls -lath scripts
+        ls -lath .github
 
     - name: Save salesforce_deployment.py file
       shell: bash
