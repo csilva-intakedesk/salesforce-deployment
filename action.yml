@@ -141,6 +141,11 @@ runs:
             delta_source_directory = os.getenv("DELTA_SOURCE_DIRECTORY")
             all_changed_files = os.environ.get("ALL_CHANGED_FILES", "")
 
+            login_command = ["sf", "org", "login", "sfdx-url", "--set-default", "--sfdx-url-file <(echo \"${{ inputs.SF_AUTH_URL }}\""]
+            print(f"Executing command: {' '.join(login_command)}")
+            # Execute the login command
+            subprocess.run(login_command, check=True)
+
             if not all_changed_files:
                 print("No changed files detected.")
                 sys.exit(0)
@@ -168,6 +173,9 @@ runs:
             if dry_run:
                 deploy_flags.append("--dry-run")
                 deploy_flags.append("--verbose")
+
+            if sf_auth_username:
+                deploy_flags.append(f"-o {sf_auth_username}")
 
             if delta_source_directory and os.path.isfile(delta_source_directory):
                 print(f"Deploying changes from {delta_from_source} to {delta_to_source}")
